@@ -2,28 +2,24 @@ import pandas as pd
 import base64
 
 
-def get_word_freq():
+def read_wordlist():
+    '''
+    Read wordlist from local file. 
+    '''
 
     words_list = []
-    words_freq = {}
-    words_rank = {}
 
     with open("wordlist_condensed.txt", "rb") as f:
-        n = 1
 
         content = f.read()
         content = base64.b64decode(content)
         content = content.decode("ascii")
 
         lines = content.split("\n")
-        for line in lines:
+        for n, line in enumerate(lines):
 
             line = line.split("\t")
             words_list.append([n, line[0], float(line[1]), int(line[2])])
-            words_freq[line[0]] = float(line[1])
-            words_rank[line[0]] = n
-
-            n += 1
 
     return words_list
 
@@ -31,7 +27,7 @@ def get_word_freq():
 class Wordlist:
     def __init__(self, top_n=None):
 
-        word_list = get_word_freq()
+        word_list = read_wordlist()
 
         for row in word_list:
             word = row[1]

@@ -1,4 +1,4 @@
-from wordle import Wordle, KnowledgeState, GREEN, YELLOW, GREY
+from wordler import Wordle, KnowledgeState, GREEN, YELLOW, GREY
 
 
 def test_evaluate_guess():
@@ -13,16 +13,23 @@ def test_evaluate_guess():
     guess5 = "appxp"
     guess6 = "appep"
 
-    assert wordle.evaluate_guess(guess1, answer) == [GREY, GREY, GREY, GREY, GREY]
-    assert wordle.evaluate_guess(guess2, answer) == [GREEN, GREY, GREY, GREY, GREY]
-    assert wordle.evaluate_guess(guess3, answer) == [GREEN, GREY, GREY, GREY, YELLOW]
-    assert wordle.evaluate_guess(guess4, answer) == [GREEN, GREY, GREEN, GREY, YELLOW]
-    assert wordle.evaluate_guess(guess5, answer) == [GREEN, GREEN, GREEN, GREY, GREY]
-    assert wordle.evaluate_guess(guess6, answer) == [GREEN, GREEN, GREEN, YELLOW, GREY]
+    assert wordle.evaluate_guess(guess1, answer) == [
+        GREY, GREY, GREY, GREY, GREY]
+    assert wordle.evaluate_guess(guess2, answer) == [
+        GREEN, GREY, GREY, GREY, GREY]
+    assert wordle.evaluate_guess(guess3, answer) == [
+        GREEN, GREY, GREY, GREY, YELLOW]
+    assert wordle.evaluate_guess(guess4, answer) == [
+        GREEN, GREY, GREEN, GREY, YELLOW]
+    assert wordle.evaluate_guess(guess5, answer) == [
+        GREEN, GREEN, GREEN, GREY, GREY]
+    assert wordle.evaluate_guess(guess6, answer) == [
+        GREEN, GREEN, GREEN, YELLOW, GREY]
 
     answer = "aaaaa"
     guess = "aabbb"
-    assert wordle.evaluate_guess(guess, answer) == [GREEN, GREEN, GREY, GREY, GREY]
+    assert wordle.evaluate_guess(guess, answer) == [
+        GREEN, GREEN, GREY, GREY, GREY]
 
 
 def test_regex():
