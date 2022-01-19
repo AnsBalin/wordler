@@ -61,3 +61,8 @@ tiger ['stare', 'tenor', 'tiger']
 proxy ['stare', 'croon', 'proud', 'proxy']
 ```
 
+## How does `PruneStrategy` work?
+
+By considering the uncertaintly reduction that results from every (guess, answer) triple composed of words from the remaining possible word list, `PruneStrategy` selects the guess that minimises the _average_ uncertaintly reduction across all answers.
+
+The uncertainty reduction is defined as just the number of words we are able to rule out after making a particular guess, and is also dependent on knowledge gained from previous guesses.
