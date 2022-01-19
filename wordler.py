@@ -3,10 +3,14 @@ import copy
 import string
 import itertools
 from collections import defaultdict
+from enum import Enum
 
-GREEN = 0
-YELLOW = 1
-GREY = 2
+
+class Tile(Enum):
+    GREEN = 0
+    YELLOW = 1
+    GREY = 2
+
 
 alphabet = string.ascii_lowercase
 
@@ -32,18 +36,18 @@ class Wordle:
         for i, (ch_pred, ch_target) in enumerate(zip(guess, answer)):
 
             if ch_pred == ch_target:
-                result[i] = GREEN
+                result[i] = Tile.GREEN
                 loose_chars.remove(ch_pred)
 
         for i, (ch_pred, ch_target) in enumerate(zip(guess, answer)):
 
             if result[i] == None:
                 if ch_pred in loose_chars:
-                    result[i] = YELLOW
+                    result[i] = Tile.YELLOW
                     loose_chars.remove(ch_pred)
 
                 else:
-                    result[i] = GREY
+                    result[i] = Tile.GREY
 
         return result
 
@@ -60,20 +64,20 @@ class KnowledgeState:
         self.mins = {ch: 0 for ch in alphabet}
 
     def guess_to_knowledge(self, guess, greens, yellows, greys):
-        '''
+        """
         Take a guess result in the form { word: "apple", result: [GREEN, GREY, GREY, YELLOW, GREY])
         and update the internal representation of the knowledge state based on this result.
-        '''
+        """
 
         mins = {ch: 0 for ch in alphabet}
         word = list(guess["word"])
         result = guess["result"]
         for i, (ch, col) in enumerate(zip(word, result)):
-            if col == GREEN:
+            if col == Tile.GREEN:
                 greens[i] = ch
                 mins[ch] += 1
 
-            elif col == YELLOW:
+            elif col == Tile.YELLOW:
                 yellows[i].append(ch)
                 mins[ch] += 1
 
@@ -83,9 +87,9 @@ class KnowledgeState:
         return mins, greens, yellows, greys
 
     def commit_guess(self, guess):
-        '''
+        """
         Actually update the current knowledge state.
-        '''
+        """
         mins, _, _, _ = self.guess_to_knowledge(
             guess, self.greens, self.yellows, self.greys
         )
@@ -93,10 +97,10 @@ class KnowledgeState:
         self.mins = mins
 
     def regex(self, guess={}):
-        '''
-        Express knowledge state as a regex to be used to filter wordlist matchstring. 
+        """
+        Express knowledge state as a regex to be used to filter wordlist matchstring.
 
-        Matchstrings are of the form WORD + COUNT 
+        Matchstrings are of the form WORD + COUNT
 
             apple10001000000120000000000000
             |WORD|-----COUNT histogram----|
@@ -110,7 +114,7 @@ class KnowledgeState:
 
             /^a..[^p]..0......0.0....[1-5]..........$/
               123  4 5abcdefghijklmno  p  qrstuvwxyz
-        '''
+        """
 
         greens = self.greens.copy()
         yellows = copy.deepcopy(self.yellows)
@@ -160,8 +164,7 @@ class KnowledgeState:
 
             # Match any count char in range '[min-max]'
             else:
-                counts_regex[i] = "[" + \
-                    str(min_count) + "-" + str(max_count) + "]"
+                counts_regex[i] = "[" + str(min_count) + "-" + str(max_count) + "]"
 
         return "^" + "".join(word_regex) + "".join(counts_regex) + "$"
 
@@ -181,8 +184,7 @@ class Strategy:
     def update_state(self, guess_result):
         self.ks.commit_guess(guess_result)
         regex = self.ks.regex()
-        self.wl.data = self.wl.data[self.wl.data["matchstring"].str.contains(
-            regex)]
+        self.wl.data = self.wl.data[self.wl.data["matchstring"].str.contains(regex)]
         self.guesses_made.append(guess_result["word"])
 
     def run_strategy(self, wd_real):
@@ -214,8 +216,7 @@ class PruneStrategy(Strategy):
 
             result = self.wd.evaluate_guess(guess, answer)
             regex = self.ks.regex(guess={"word": guess, "result": result})
-            wl2data = self.wl.data[self.wl.data["matchstring"].str.contains(
-                regex)]
+            wl2data = self.wl.data[self.wl.data["matchstring"].str.contains(regex)]
             reduction = len(self.wl.data) - len(wl2data)
             total[guess] += reduction / (len(words) - 1)
 

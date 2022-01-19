@@ -3,13 +3,13 @@ import base64
 
 
 def read_wordlist():
-    '''
-    Read wordlist from local file. 
-    '''
+    """
+    Read wordlist from local file.
+    """
 
     words_list = []
 
-    with open("wordlist_condensed.txt", "rb") as f:
+    with open("wordlist.b64", "rb") as f:
 
         content = f.read()
         content = base64.b64decode(content)
