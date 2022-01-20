@@ -66,3 +66,21 @@ proxy ['stare', 'croon', 'proud', 'proxy']
 By considering the uncertaintly reduction that results from every (guess, answer) pair composed of words from the remaining possible word list, `PruneStrategy` selects the guess that minimises the _average_ uncertaintly reduction across all answers.
 
 The uncertainty reduction is defined as just the number of words we are able to rule out after making a particular guess, and is also dependent on knowledge gained from previous guesses.
+
+## Benchmarking 
+
+`benchmarking.py` provides some functions to benchmark a strategy and perform other analyses:
+
+* `bench_simple(fn,top_n)`: Pass a function `fn` that instantiates a strategy, and dictionary size `top_n`, and this will compute the number of guesses required to obtain every possible answer in the dictionary.
+* `starting_guess(top_n)`: For a dictionary containing the `top_n` most frequent words, find the best starting guess words based on the average wordlist reduction obtained. For example, the following are some of the best words with a dictionary of size 2000:
+
+```
+word    avg. reduction
+------------------------------
+great   1915.8809404702274
+those   1916.736368184117
+years   1938.3111555777882
+least   1946.3071535767901
+tears   1956.0560280140282
+raise   1957.1265632816398
+```
