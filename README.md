@@ -1,6 +1,9 @@
 # `wordler.py`
 
-`wordler` is a Wordle auto-solver which uses a tree-pruning strategy to compute sequential optimal guesses, able to solve most games in 3 or 4 guesses.
+`wordler` is a [Wordle](https://www.powerlanguage.co.uk/wordle/) __auto-solver__ which uses a tree-pruning strategy to compute sequential optimal guesses, able to solve most games in 3 or 4 guesses.
+
+Rather than just assisting a player by suggesting valid remaining words, `wordler` aims to compute the optimal guess based on all prior knowledge. Benchmarking shows `wordler` is able to guess the correct answer in 3-4 guesses on average depending on dictionary size used. 
+
 
 ## Example Usage 
 ### 1. Run manually (with external game)
